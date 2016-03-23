@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>秒拍视频_秒拍网页版_秒拍小咖秀_QQ秒拍网</title>
+    <meta name="keywords" content="秒拍,秒拍视频,秒拍网页版,小咖秀,QQ秒拍网">
+    <meta name="description" content="QQ秒拍网是一个提供秒拍视频网页播放的分享网站，各类小咖秀视频、女神视频、搞笑视频拥有仅有，使用秒拍网页版就上QQ秒拍网。">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <link href="http://wsacdn4.miaopai.com/static20131031/favicon.ico" type="image/x-icon" rel="icon"/>
+    <link href="http://wsacdn4.miaopai.com/static20131031/favicon.ico" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" type="text/css"
+          href="http://wsacdn2.miaopai.com/static20131031/miaopai20140729/css/reset.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="http://wsacdn3.miaopai.com/static20131031/miaopai20140729/css/miaopai-2.4.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="http://wsacdn1.miaopai.com/static20131031/miaopai20140729/css/emoji-1.1.css"/>
+</head>
+<style>
+    .talk_action .a:hover {
+        color: #fcb538;
+    }
+
+    .main3 ul li .share a:hover {
+        color: #363636;
+    }
+
+    .share ol li a:hover {
+        color: #fcb538;
+    }
+
+    .list ol li a:hover {
+        color: #fcb538;
+    }
+
+    .personal .person img {
+        vertical-align: middle;
+        padding-top: 0;
+        *padding-top: 13px;
+    }
+
+    #videoexit {
+        display: inline-block;
+        width: 34px;
+        height: 34px;
+        background: -405px -448px url(http://wsacdn3.miaopai.com/static20131031/miaopai20140729/img/sprite.png);
+        _background: -401px -446px url(http://wsacdn4.miaopai.com/static20131031/miaopai20140729/img/sprite.gif);
+        position: absolute;
+        right: -21px;
+        top: -21px;
+        z-index: -1;
+        cursor: pointer;
+    }
+
+    /****微信登陆*******/
+
+    .dialog,
+    .dialog1 {
+        height: 522px;
+    }
+
+    .sina_login,
+    .wx_login {
+        width: 257px;
+        height: 50px;
+        background: url(http://wsacdn4.miaopai.com/static20131031/miaopai20140729/img/login_wechat.png) no-repeat;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+
+    .sina_login {
+        background: url(http://wsacdn4.miaopai.com/static20131031/miaopai20140729/img/login_sina.png) no-repeat;
+    }
+
+    .header ul {
+        float: right;
+    }
+
+    .li .p a {
+        display: inline;
+    }
+
+    .main3 ul {
+        display: none;
+    }
+
+    .main3 ul.show {
+        display: block;
+    }
+
+    .f_nav {
+        position: fixed;
+        filter: alpha(opacity=90);
+        -moz-opacity: 0.9;
+        opacity: 0.9;
+        zoom: 1;
+        top: 0;
+        _position: absolute;
+        z-index: 1002;
+        _top: expression(documentElement.scrollTop + -403 + "px");
+    }
+</style>
+
+<body>
+<div class="header_big">
+
+    <div class="header">
+        <div class="logo">
+            <a href='/'><img class="head_logo" src="/static/logo.jpg"/></a>
+        </div>
+        <div class="personal">
+            <div class="person"></div>
+            <a href='javascript:;' title="登录" class="login">[登录]</a>
+        </div>
+        <ul id="banner_t">
+            <li><a href='/'>首页</a></li>
+        </ul>
+
+    </div>
+</div>
+
+<!--/head-->
+
+<div class="wrap_nav" id="tab_main">
+    <ul class="main_nav clearfix" id="tab_nav">
+        <li class='hover'>热门</li>
+        <li>明星名人</li>
+        <li>热点</li>
+        <li>女神</li>
+        <li>创意</li>
+        <li>搞笑</li>
+        <li>宝宝</li>
+        <li>萌宠</li>
+        <li>随手拍</li>
+        <li>热门话题</li>
+    </ul>
+</div>
+
+<div class="main main2">
+</div>
+<div class="main main3 clearfix" id="tab_sub">
+
+    <ul class="show">
+        {% for video in hot_videos %}
+        <li>
+            <div class="li">
+                <div class="img1">
+                    <a title="{{video['channel']['ext']['t']}}" href="/show/{{video['channel']['scid']}}.htm"
+                       target="blank">
+                        <img class="img2" src="{{video['channel']['pic']['base']}}{{video['channel']['pic']['m']}}">
+                        <b class="img3"></b>
+                    </a>
+                </div>
+                <div class="txt1 clearfix">
+                    <div class="head_icon">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">
+                            <img src="{{video['channel']['ext']['owner']['icon']}}">
+                        </a>
+                    </div>
+                    <div class="head_txt1">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">{{video['channel']['ext']['owner']['nick']}}</a>
+
+                        <div class="head_txt2">
+                            <a href="/show/{{video['channel']['scid']}}.htm">{{video['channel']['ext2']['createTimeNice']}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="p">{{video['channel']['ext']['ft']}}</div>
+                <div class="share">
+                    <a href="/show/{{video['channel']['scid']}}.htm" target="blank">
+                        <ol>
+                            <li>评论{{video['channel']['stat']['ccnt']}}</li>
+                            <li>赞{{video['channel']['stat']['lcnt']}}</li>
+                            <li style="border-right:medium none">分享</li>
+                        </ol>
+                    </a>
+                </div>
+            </div>
+        </li>
+        {% endfor%}
+    </ul>
+
+    <ul>
+        {% for video in star_videos %}
+        <li>
+            <div class="li">
+                <div class="img1">
+                    <a title="{{video['channel']['ext']['t']}}" href="/show/{{video['channel']['scid']}}.htm"
+                       target="blank">
+                        <img class="img2" src="{{video['channel']['pic']['base']}}{{video['channel']['pic']['m']}}">
+                        <b class="img3"></b>
+                    </a>
+                </div>
+                <div class="txt1 clearfix">
+                    <div class="head_icon">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">
+                            <img src="{{video['channel']['ext']['owner']['icon']}}">
+                        </a>
+                    </div>
+                    <div class="head_txt1">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">{{video['channel']['ext']['owner']['nick']}}</a>
+
+                        <div class="head_txt2">
+                            <a href="/show/{{video['channel']['scid']}}.htm">{{video['channel']['ext2']['createTimeNice']}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="p">{{video['channel']['ext']['ft']}}</div>
+                <div class="share">
+                    <a href="/show/{{video['channel']['scid']}}.htm" target="blank">
+                        <ol>
+                            <li>评论{{video['channel']['stat']['ccnt']}}</li>
+                            <li>赞{{video['channel']['stat']['lcnt']}}</li>
+                            <li style="border-right:medium none">分享</li>
+                        </ol>
+                    </a>
+                </div>
+            </div>
+        </li>
+        {% endfor%}
+    </ul>
+    <ul>
+        {% for video in redian_videos %}
+        <li>
+            <div class="li">
+                <div class="img1">
+                    <a title="{{video['channel']['ext']['t']}}" href="/show/{{video['channel']['scid']}}.htm"
+                       target="blank">
+                        <img class="img2" src="{{video['channel']['pic']['base']}}{{video['channel']['pic']['m']}}">
+                        <b class="img3"></b>
+                    </a>
+                </div>
+                <div class="txt1 clearfix">
+                    <div class="head_icon">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">
+                            <img src="{{video['channel']['ext']['owner']['icon']}}">
+                        </a>
+                    </div>
+                    <div class="head_txt1">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">{{video['channel']['ext']['owner']['nick']}}</a>
+
+                        <div class="head_txt2">
+                            <a href="/show/{{video['channel']['scid']}}.htm">{{video['channel']['ext2']['createTimeNice']}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="p">{{video['channel']['ext']['ft']}}</div>
+                <div class="share">
+                    <a href="/show/{{video['channel']['scid']}}.htm" target="blank">
+                        <ol>
+                            <li>评论{{video['channel']['stat']['ccnt']}}</li>
+                            <li>赞{{video['channel']['stat']['lcnt']}}</li>
+                            <li style="border-right:medium none">分享</li>
+                        </ol>
+                    </a>
+                </div>
+            </div>
+        </li>
+        {% endfor%}
+    </ul>
+
+    <ul>
+        {% for video in nvshen_videos %}
+        <li>
+            <div class="li">
+                <div class="img1">
+                    <a title="{{video['channel']['ext']['t']}}" href="/show/{{video['channel']['scid']}}.htm"
+                       target="blank">
+                        <img class="img2" src="{{video['channel']['pic']['base']}}{{video['channel']['pic']['m']}}">
+                        <b class="img3"></b>
+                    </a>
+                </div>
+                <div class="txt1 clearfix">
+                    <div class="head_icon">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">
+                            <img src="{{video['channel']['ext']['owner']['icon']}}">
+                        </a>
+                    </div>
+                    <div class="head_txt1">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">{{video['channel']['ext']['owner']['nick']}}</a>
+
+                        <div class="head_txt2">
+                            <a href="/show/{{video['channel']['scid']}}.htm">{{video['channel']['ext2']['createTimeNice']}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="p">{{video['channel']['ext']['ft']}}</div>
+                <div class="share">
+                    <a href="/show/{{video['channel']['scid']}}.htm" target="blank">
+                        <ol>
+                            <li>评论{{video['channel']['stat']['ccnt']}}</li>
+                            <li>赞{{video['channel']['stat']['lcnt']}}</li>
+                            <li style="border-right:medium none">分享</li>
+                        </ol>
+                    </a>
+                </div>
+            </div>
+        </li>
+        {% endfor%}
+    </ul>
+
+    <ul>
+        {% for video in chuangyi_videos %}
+        <li>
+            <div class="li">
+                <div class="img1">
+                    <a title="{{video['channel']['ext']['t']}}" href="/show/{{video['channel']['scid']}}.htm"
+                       target="blank">
+                        <img class="img2" src="{{video['channel']['pic']['base']}}{{video['channel']['pic']['m']}}">
+                        <b class="img3"></b>
+                    </a>
+                </div>
+                <div class="txt1 clearfix">
+                    <div class="head_icon">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">
+                            <img src="{{video['channel']['ext']['owner']['icon']}}">
+                        </a>
+                    </div>
+                    <div class="head_txt1">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">{{video['channel']['ext']['owner']['nick']}}</a>
+
+                        <div class="head_txt2">
+                            <a href="/show/{{video['channel']['scid']}}.htm">{{video['channel']['ext2']['createTimeNice']}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="p">{{video['channel']['ext']['ft']}}</div>
+                <div class="share">
+                    <a href="/show/{{video['channel']['scid']}}.htm" target="blank">
+                        <ol>
+                            <li>评论{{video['channel']['stat']['ccnt']}}</li>
+                            <li>赞{{video['channel']['stat']['lcnt']}}</li>
+                            <li style="border-right:medium none">分享</li>
+                        </ol>
+                    </a>
+                </div>
+            </div>
+        </li>
+        {% endfor%}
+    </ul>
+
+    <ul>
+        {% for video in gaoxiao_videos %}
+        <li>
+            <div class="li">
+                <div class="img1">
+                    <a title="{{video['channel']['ext']['t']}}" href="/show/{{video['channel']['scid']}}.htm"
+                       target="blank">
+                        <img class="img2" src="{{video['channel']['pic']['base']}}{{video['channel']['pic']['m']}}">
+                        <b class="img3"></b>
+                    </a>
+                </div>
+                <div class="txt1 clearfix">
+                    <div class="head_icon">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">
+                            <img src="{{video['channel']['ext']['owner']['icon']}}">
+                        </a>
+                    </div>
+                    <div class="head_txt1">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">{{video['channel']['ext']['owner']['nick']}}</a>
+
+                        <div class="head_txt2">
+                            <a href="/show/{{video['channel']['scid']}}.htm">{{video['channel']['ext2']['createTimeNice']}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="p">{{video['channel']['ext']['ft']}}</div>
+                <div class="share">
+                    <a href="/show/{{video['channel']['scid']}}.htm" target="blank">
+                        <ol>
+                            <li>评论{{video['channel']['stat']['ccnt']}}</li>
+                            <li>赞{{video['channel']['stat']['lcnt']}}</li>
+                            <li style="border-right:medium none">分享</li>
+                        </ol>
+                    </a>
+                </div>
+            </div>
+        </li>
+        {% endfor%}
+    </ul>
+
+    <ul>
+        {% for video in baobao_videos %}
+        <li>
+            <div class="li">
+                <div class="img1">
+                    <a title="{{video['channel']['ext']['t']}}" href="/show/{{video['channel']['scid']}}.htm"
+                       target="blank">
+                        <img class="img2" src="{{video['channel']['pic']['base']}}{{video['channel']['pic']['m']}}">
+                        <b class="img3"></b>
+                    </a>
+                </div>
+                <div class="txt1 clearfix">
+                    <div class="head_icon">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">
+                            <img src="{{video['channel']['ext']['owner']['icon']}}">
+                        </a>
+                    </div>
+                    <div class="head_txt1">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">{{video['channel']['ext']['owner']['nick']}}</a>
+
+                        <div class="head_txt2">
+                            <a href="/show/{{video['channel']['scid']}}.htm">{{video['channel']['ext2']['createTimeNice']}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="p">{{video['channel']['ext']['ft']}}</div>
+                <div class="share">
+                    <a href="/show/{{video['channel']['scid']}}.htm" target="blank">
+                        <ol>
+                            <li>评论{{video['channel']['stat']['ccnt']}}</li>
+                            <li>赞{{video['channel']['stat']['lcnt']}}</li>
+                            <li style="border-right:medium none">分享</li>
+                        </ol>
+                    </a>
+                </div>
+            </div>
+        </li>
+        {% endfor%}
+    </ul>
+
+    <ul>
+        {% for video in mengchong_videos %}
+        <li>
+            <div class="li">
+                <div class="img1">
+                    <a title="{{video['channel']['ext']['t']}}" href="/show/{{video['channel']['scid']}}.htm"
+                       target="blank">
+                        <img class="img2" src="{{video['channel']['pic']['base']}}{{video['channel']['pic']['m']}}">
+                        <b class="img3"></b>
+                    </a>
+                </div>
+                <div class="txt1 clearfix">
+                    <div class="head_icon">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">
+                            <img src="{{video['channel']['ext']['owner']['icon']}}">
+                        </a>
+                    </div>
+                    <div class="head_txt1">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">{{video['channel']['ext']['owner']['nick']}}</a>
+
+                        <div class="head_txt2">
+                            <a href="/show/{{video['channel']['scid']}}.htm">{{video['channel']['ext2']['createTimeNice']}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="p">{{video['channel']['ext']['ft']}}</div>
+                <div class="share">
+                    <a href="/show/{{video['channel']['scid']}}.htm" target="blank">
+                        <ol>
+                            <li>评论{{video['channel']['stat']['ccnt']}}</li>
+                            <li>赞{{video['channel']['stat']['lcnt']}}</li>
+                            <li style="border-right:medium none">分享</li>
+                        </ol>
+                    </a>
+                </div>
+            </div>
+        </li>
+        {% endfor%}
+    </ul>
+    <ul>
+        {% for video in shuishoupai_videos %}
+        <li>
+            <div class="li">
+                <div class="img1">
+                    <a title="{{video['channel']['ext']['t']}}" href="/show/{{video['channel']['scid']}}.htm"
+                       target="blank">
+                        <img class="img2" src="{{video['channel']['pic']['base']}}{{video['channel']['pic']['m']}}">
+                        <b class="img3"></b>
+                    </a>
+                </div>
+                <div class="txt1 clearfix">
+                    <div class="head_icon">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">
+                            <img src="{{video['channel']['ext']['owner']['icon']}}">
+                        </a>
+                    </div>
+                    <div class="head_txt1">
+                        <a title="{{video['channel']['ext']['owner']['nick']}}"
+                           href="/u/{{video['channel']['ext']['owner']['loginName']}}" target="_blank">{{video['channel']['ext']['owner']['nick']}}</a>
+
+                        <div class="head_txt2">
+                            <a href="/show/{{video['channel']['scid']}}.htm">{{video['channel']['ext2']['createTimeNice']}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="p">{{video['channel']['ext']['ft']}}</div>
+                <div class="share">
+                    <a href="/show/{{video['channel']['scid']}}.htm" target="blank">
+                        <ol>
+                            <li>评论{{video['channel']['stat']['ccnt']}}</li>
+                            <li>赞{{video['channel']['stat']['lcnt']}}</li>
+                            <li style="border-right:medium none">分享</li>
+                        </ol>
+                    </a>
+                </div>
+            </div>
+        </li>
+        {% endfor%}
+    </ul>
+    <ul>
+        {%for huati in huatis %}
+        <li>
+            <div class="li li1">
+                <div class="img1">
+                    <a title="{{huati['topic']['title']}}" href="/stpid/{{huati['topic']['stpid']}}" target="blank"><img
+                            class="img2" src="{{huati['channel']['pic']['base']}}{{huati['channel']['pic']['m']}}"><b
+                            class="img3"></b></a>
+                </div>
+                <div class="p p1"><a title="{{huati['topic']['title']}}" href="/stpid/{{huati['topic']['stpid']}}"
+                                     target="blank">{{huati['topic']['title']}}</a></div>
+            </div>
+        </li>
+        {%endfor%}
+    </ul>
+
+</div>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function () {
+        var currindex = 0;
+        $('#tab_nav li').click(function () {
+            $('#tab_nav li').removeClass('hover');
+            $(this).addClass('hover');
+            currindex = $(this).index();
+            $("#tab_sub ul").each(function () {
+                if (currindex == $(this).index()) {
+                    if (!$(this).hasClass('show')) {
+                        $(this).addClass('show');
+                    }
+                } else {
+                    $(this).removeClass('show');
+                }
+            });
+        });
+
+        var tabtop = $('#tab_main').offset().top;
+        var getstop = function () {
+            return ((document.body && document.body.scrollTop) || (document.documentElement && document.documentElement.scrollTop) || 0);
+        }
+        window.onscroll = function () {
+            var t = getstop();
+            if (t > tabtop) {
+                $('#tab_main').addClass('f_nav');
+            } else if (t <= tabtop) {
+                $('#tab_main').removeClass('f_nav');
+            }
+        }
+    })
+</script>
+<div class="footer " style="height:69px">
+    <p style="line-height: 1.3em;padding-top:20px;">本站视频均来源于网络，如有版权问题请联系我们删除（QQ秒拍网
+        www.qqfans.com.cn）渝ICP备12003008号-10 <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e335e212bf034d1f5f5f52e3efeabbca";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</p>
+</div>
+
+</body>
+</html>
