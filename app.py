@@ -5,12 +5,20 @@ import requests
 import re
 import json
 import time
+import os
 import threading
+import platform
 
 app = Flask(__name__)
+debug = True
+if platform.system() == 'Windows':
+    path = os.getcwd() + '\\cache'
+else:
+    path = 'cache'
+    debug = False
 cache = Cache(app, config={'CACHE_TYPE': 'filesystem',
                            'CACHE_DEFAULT_TIMEOUT': 60 * 60 * 24,
-                           'CACHE_DIR': 'E:\project\miaopai-thief.git\cache'})
+                           'CACHE_DIR': path})
 time_out = 60
 index_doc = {
     'update_time': 0,
@@ -73,6 +81,30 @@ def user(path):
     return html
 
 
+@app.route('/u/<path>/fwded')
+@cache.cached()
+def user_type(path):
+    req = requests.session()
+    req.cookies.clear()
+    url = 'http://www.miaopai.com/u/' + path + '?type=fwded'
+    res = req.get(url, timeout=time_out)
+    html = replace_html(res.text)
+    html = html.replace(u'的秒拍视频', u'的转发视频')
+    return html
+
+
+@app.route('/u/<path>/like')
+@cache.cached()
+def user_like(path):
+    req = requests.session()
+    req.cookies.clear()
+    url = 'http://www.miaopai.com/u/' + path + '?type=like'
+    res = req.get(url, timeout=time_out)
+    html = replace_html(res.text)
+    html = html.replace(u'的秒拍视频', u'的点赞视频')
+    return html
+
+
 @app.route('/u/<path>/relation/follow.htm')
 @cache.cached()
 def follow(path):
@@ -115,24 +147,41 @@ def show(path):
 def stpid(path):
     req = requests.session()
     req.cookies.clear()
-    url = 'http://www.miaopai.com/stpid/' + path
+    url = 'http://ent.v.sina.cn/stpid/' + path
     res = req.get(url, timeout=time_out)
     html = replace_html(res.text)
     return html
 
 
-@app.route('/miaopai/<path>')
+@app.route('/miaopai/topicname/<path>')
+@cache.cached()
+def topicname(path):
+    req = requests.session()
+    req.cookies.clear()
+    url = 'http://www.miaopai.com/miaopai/topic?topicname=' + path
+    res = req.get(url, timeout=time_out)
+    html = replace_html(res.text)
+    return html
+
+
+@app.route('/miaopai/topic/<path>')
 @cache.cached()
 def topic(path):
     req = requests.session()
     req.cookies.clear()
-    if request.url.find('topic') > 0:
-        url = 'http://www.miaopai.com/miaopai/topic?' + request.query_string
-    elif request.url.find('plaza') > 0:
-        url = 'http://www.miaopai.com/miaopai/plaza?' + request.query_string
-    else:
-        abort('404')
+    url = 'http://www.miaopai.com/miaopai/topic?topic=' + path
     res = req.get(url, timeout=time_out)
+    html = replace_html(res.text)
+    return html
+
+
+@app.route('/miaopai/plaza/cateid/<path>')
+@cache.cached()
+def plaza(path):
+    req = requests.session()
+    req.cookies.clear()
+    url = 'http://www.miaopai.com/miaopai/plaza?cateid=' + path
+    res = req.get(url, timeout=time_out, allow_redirects=False)
     html = replace_html(res.text)
     return html
 
@@ -232,17 +281,35 @@ def get_index_doc():
 def replace_html(html):
     html = html.replace(u'秒拍-10秒拍大片', u'QQ秒拍网')
     html = html.replace('http://www.miaopai.com/u/', '/u/')
+    html = html.replace('http://ent.v.sina.cn/u/', '/u/')
     html = html.replace('http://www.miaopai.com/show/', '/show/')
+    html = html.replace('http://ent.v.sina.cn/show/', '/show/')
     html = html.replace('/cc/checkcookie', 'http://www.miaopai.com/cc/checkcookie')
     html = html.replace('<a href=\'http://www.miaopai.com/\'><b class="head_logo"></b></a>',
                         '<a href="/"><b class="head_logo"></b></a>')
     html = html.replace(u'<li ><a href=\'http://www.miaopai.com/\'>首页</a></li>', u'<li ><a href="/">首页</a></li>')
-    html = html.replace('http://www.miaopai.com/miaopai/topic?topicname', '/miaopai/topic?topicname')
-    html = html.replace('http://www.miaopai.com/miaopai/topic?topic=', '/miaopai/topic?topic=')
-    html = html.replace('http://www.miaopai.com/miaopai/plaza', '/miaopai/plaza')
+    html = html.replace('http://www.miaopai.com/miaopai/topic?topicname=', '/miaopai/topicname/')
+    html = html.replace('http://ent.v.sina.cn/miaopai/topic?topicname=', '/miaopai/topicname/')
+    html = html.replace('/miaopai/topic?topicname=', '/miaopai/topicname/')
+    html = html.replace('http://www.miaopai.com/miaopai/topic?topic=', '/miaopai/topic/')
+    html = html.replace('http://ent.v.sina.cn/miaopai/topic?topic=', '/miaopai/topic/')
+    html = html.replace('/miaopai/topic?topic=', '/miaopai/topic/')
+    html = html.replace('http://www.miaopai.com/miaopai/plaza?cateid=', '/miaopai/plaza/cateid/')
+    html = html.replace('http://ent.v.sina.cn/miaopai/plaza?cateid=', '/miaopai/plaza/cateid/')
+    html = html.replace('/miaopai/plaza?cateid=', '/miaopai/plaza/cateid/')
     html = html.replace('http://www.miaopai.com/stpid', '/stpid')
+    html = html.replace('?type=fwded', '/fwded')
+    html = html.replace('?type=like', '/like')
     html = html.replace(u'''京ICP备12022740号 京公网安备11010502026918 炫一下（北京）科技有限公司 Copyright © MiaoPai All rights reserved.<br />
-北京市朝阳区红军营南路瑞普大厦15层1503室 010-64828268''', u'本站视频均来源于网络，如有版权问题请联系我们删除（QQ秒拍网 www.qqfans.com.cn）渝ICP备12003008号-10')
+北京市朝阳区红军营南路瑞普大厦15层1503室 010-64828268''', u'''本站视频均来源于网络，如有版权问题请联系我们删除（QQ秒拍网 www.qqfans.com.cn）渝ICP备12003008号-10 <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e335e212bf034d1f5f5f52e3efeabbca";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>''')
     html = html.replace(u'''        <div style="width:300px;margin:0 auto; padding:20px 0;">
           <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502030231" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
             <img src="http://wsacdn2.miaopai.com/static20131031/miaopai20140729/img/ba.png" style="float:left;"/>
@@ -271,10 +338,28 @@ var _hmt = _hmt || [];
 </script>
 ''')
     html = html.replace(u'''<!-- <p style="margin-top:10px;">商务合作： 杨先生  18501264917</p> -->''', '')
+    html = html.replace(u'''</script>
+<div style="display:none"><script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fe8fa5926bca558076246d7fb7ca12071'type='text/javascript'%3E%3C/script%3E"));
+</script>''', '')
     html = html.replace(
         u'''<a class='ts1' href="http://weibo.com/shoujipaike?topnav=1&wvr=5&topsug=1"  target='_blank'> <b class='sina_icon'></b><p style='margin-top: 24px;display: inline;color: #bababa;font-size: 16px;border-bottom: 1px solid #bababa;'>联系我们的微博</p></a>''',
         '')
     html = html.replace('http://ent.v.sina.cn/', '/')
+    html = html.replace('<meta name="baidu-site-verification" content="VKMu7txGGC" />', '')
+    html = html.replace(u'''	<script>
+			var gurl="www.yixia.com"
+			var follow_url= "/fu/follow";
+			var delete_url= "/fu/delete";
+			//var follow_url="http://www.yixia.com/yixia/fu/follow"
+			//var delete_url="http://www.yixia.com/yixia/fu/delete"
+			var like_url="/miaopai/domark";
+			var miaopai = new miaopai();
+			var is_login_state = false;
+			miaopai.overall();
+
+	</script>''', '')
     return html
 
 
@@ -287,4 +372,4 @@ def get_center_str(left, right, str):
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=debug)
