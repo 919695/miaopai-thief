@@ -194,9 +194,27 @@ def plaza(path):
     req = requests.session()
     req.cookies.clear()
     url = 'http://www.miaopai.com/miaopai/plaza?cateid=' + path
-    res = req.get(url, timeout=time_out, allow_redirects=False)
+    res = req.get(url, timeout=time_out)
     html = replace_html(res.text)
     return html
+
+
+@app.route('/miaopai/get_v2_comments/<path>')
+def coments(path):
+    url = 'http://www.miaopai.com/miaopai/get_v2_comments?' + path + '&' + request.query_string
+    req = requests.session()
+    req.cookies.clear()
+    res = req.get(url, timeout=time_out)
+    return res.text
+
+
+@app.route('/gu/u')
+def gu():
+    url = 'http://www.miaopai.com/gu/u?' + request.query_string
+    req = requests.session()
+    req.cookies.clear()
+    res = req.get(url, timeout=time_out)
+    return res.text
 
 
 def update_index_doc():
@@ -318,6 +336,7 @@ def replace_html(html):
     html = html.replace('http://www.miaopai.com/stpid', '/stpid')
     html = html.replace('?type=fwded', '/fwded')
     html = html.replace('?type=like', '/like')
+    html = html.replace('$.get("/miaopai/get_v2_comments?', '$.get("/miaopai/get_v2_comments/')
     html = html.replace(u'''京ICP备12022740号 京公网安备11010502026918 炫一下（北京）科技有限公司 Copyright © MiaoPai All rights reserved.<br />
 北京市朝阳区红军营南路瑞普大厦15层1503室 010-64828268''', u'''本站视频均来源于网络，如有版权问题请联系我们删除（QQ秒拍网 www.qqfans.com.cn）渝ICP备12003008号-10 <script>
 var _hmt = _hmt || [];
