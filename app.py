@@ -8,15 +8,19 @@ import time
 import os
 import threading
 import platform
+import sys
 
 app = Flask(__name__)
+
 debug = True
 if platform.system() == 'Windows':
-    path = os.getcwd() + '\\cache'
+    path = os.getcwd() + '\\cache\\'
 else:
-    path = 'cache'
+    path = 'cache/'
     debug = False
+
 cache = Cache(app, config={'CACHE_TYPE': 'filesystem',
+                           'CACHE_THRESHOLD': sys.maxint,
                            'CACHE_DEFAULT_TIMEOUT': 60 * 60 * 24,
                            'CACHE_DIR': path})
 time_out = 60
@@ -27,11 +31,20 @@ index_doc = {
 
 
 @app.route('/')
-@cache.cached(timeout=60 * 10)
+@cache.cached(timeout=60 * 60)
 def index():
-    if index_doc['doc'] == {}:
+    index_path = path + 'ff8338158e5ff8843a2cb2d748fd89ec'
+    # 首次启动程序且没有缓存文件
+    if index_doc['doc'] == {} and os.path.exists(index_path) == False:
         index_doc['doc'] = get_index_doc()
         index_doc['update_time'] = int(time.time())
+    # 首次启动有缓存文件
+    elif index_doc['doc'] == {} and os.path.exists(index_path) == True:
+        threading.Thread(target=update_index_doc).start()
+        with open(index_path) as index_file:
+            index_html = index_file.read()
+        return index_html[index_html.find('<!DOCTYPE html>'):len(index_html)]
+    # 有内存缓存
     else:
         now_time = int(time.time())
         if now_time - index_doc['update_time'] > 3600:
