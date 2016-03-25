@@ -338,7 +338,7 @@ def replace_html(html):
     html = html.replace('?type=like', '/like')
     html = html.replace('$.get("/miaopai/get_v2_comments?', '$.get("/miaopai/get_v2_comments/')
     html = html.replace(u'''京ICP备12022740号 京公网安备11010502026918 炫一下（北京）科技有限公司 Copyright © MiaoPai All rights reserved.<br />
-北京市朝阳区红军营南路瑞普大厦15层1503室 010-64828268''', u'''本站视频均来源于网络，如有版权问题请联系我们删除（QQ秒拍网 www.qqfans.com.cn）渝ICP备12003008号-10 <script>
+北京市朝阳区红军营南路瑞普大厦15层1503室 010-64828268''', u'''本站非秒拍官网，视频均来源于网络，如有版权问题请联系我们删除（QQ秒拍网 www.qqfans.com.cn）渝ICP备12003008号-10 <script>
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
@@ -364,7 +364,7 @@ var _hmt = _hmt || [];
 			<li class='logo_s'><b></b></li>
 		</ul> -->''', '')
     html = html.replace(u'''京ICP备12022740号 Copyright © YIXIA All rights reserved.''',
-                        u'''本站视频均来源于网络，如有版权问题请联系我们删除（QQ秒拍网 www.qqfans.com.cn）渝ICP备12003008号-10 <script>
+                        u'''本站非秒拍官网，视频均来源于网络，如有版权问题请联系我们删除（QQ秒拍网 www.qqfans.com.cn）渝ICP备12003008号-10 <script>
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
@@ -384,6 +384,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
         u'''<a class='ts1' href="http://weibo.com/shoujipaike?topnav=1&wvr=5&topsug=1"  target='_blank'> <b class='sina_icon'></b><p style='margin-top: 24px;display: inline;color: #bababa;font-size: 16px;border-bottom: 1px solid #bababa;'>联系我们的微博</p></a>''',
         '')
     html = html.replace('http://ent.v.sina.cn/', '/')
+    html = html.replace(u"<a href='/miaopai/plaza/cateid/2003'>话题</a>", u'<span>话题</span>')
     html = html.replace('<meta name="baidu-site-verification" content="VKMu7txGGC" />', '')
     html = html.replace(u'''	<script>
 			var gurl="www.yixia.com"
