@@ -12,12 +12,17 @@ import sys
 
 app = Flask(__name__)
 
-debug = True
 if platform.system() == 'Windows':
+    debug = False
     path = os.getcwd() + '\\cache\\'
+    host = '127.0.0.1'
+    port = 808
 else:
+    debug = True
+    host = '0.0.0.0'
     path = 'cache/'
     debug = False
+    port = 80
 index_path = path + 'index.json'
 cache = Cache(app, config={'CACHE_TYPE': 'filesystem',
                            'CACHE_THRESHOLD': sys.maxint,
@@ -49,6 +54,9 @@ def index():
             # 超过1小时后台进行更新
             if now_time - index_doc['update_time'] > 3600:
                 threading.Thread(target=update_index_doc).start()
+
+    if index_doc['doc']['huatis'][0] == []:
+        del index_doc['doc']['huatis'][0]
 
     return render_template('index.html',
                            hot_videos=index_doc['doc']['hot_videos'],
@@ -410,4 +418,4 @@ def get_center_str(left, right, str):
 
 
 if __name__ == '__main__':
-    app.run(debug=debug)
+    app.run(debug=debug, port=port, host=host)
